@@ -1,37 +1,36 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Default username for local servers
-$password = ""; // Default password for local servers (leave empty if none)
+$username = "root"; // Adjust accordingly
+$password = ""; // Adjust accordingly
 $dbname = "list_manager";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $items = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true);
 
-    // Clear existing items (optional, depending on your needs)
-    $conn->query("TRUNCATE TABLE lists");
+$listId = $data['listId'];
+$items = $data['items'];
 
-    // Insert each item into the database
-    foreach ($items as $item) {
-        $text = $conn->real_escape_string($item['text']);
-        $completed = $item['completed'] ? 1 : 0;
+// Clear existing items for the list
+$sql = "DELETE FROM list_items WHERE list_id = $listId";
+$conn->query($sql);
 
-        $sql = "INSERT INTO lists (item, completed) VALUES ('$text', '$completed')";
+// Insert new items
+foreach ($items as $item) {
+    $text = $conn->real_escape_string($item['text']);
+    $completed = $item['completed'] ? 1 : 0;
 
-        if ($conn->query($sql) !== TRUE) {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    $sql = "INSERT INTO list_items (list_id, item, completed) VALUES ($listId, '$text', $completed)";
+
+    if ($conn->query($sql) !== TRUE) {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
-    echo "List saved successfully!";
 }
 
+echo "List saved successfully!";
 $conn->close();
 ?>

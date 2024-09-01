@@ -2,22 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping List</title>
+    <title>Shopping List Manager</title>
+    <!-- Add your CSS here -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Build Your Shopping List</h1>
-        <div class="input-container">
-            <input type="text" id="new-item" placeholder="Type an item and press Enter" autofocus>
+    <div class="container">
+        <h1>Shopping List Manager</h1>
+
+        <!-- List of all lists -->
+        <div id="lists-container" class="lists-container">
+            <h2>All Lists</h2>
+            <ul id="lists">
+                <!-- JavaScript will dynamically populate this list -->
+            </ul>
+            <input type="text" id="new-list-name" placeholder="Enter new list name">
+            <button id="create-list">Create New List</button>
         </div>
-        <ul id="list"></ul>
-        <button id="save-list">Save List</button>
+
+        <!-- List items section -->
+        <div id="list-items-container" class="list-items-container">
+            <h2 id="current-list-name">List Items</h2>
+            <ul id="list">
+                <!-- JavaScript will dynamically populate this list -->
+            </ul>
+            <input type="text" id="new-item" placeholder="Enter new item">
+            <button id="save-list">Save List</button>
+        </div>
     </div>
 
-
+    <!-- Include the JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
