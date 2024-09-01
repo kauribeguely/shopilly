@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
         const item = {
             id: Date.now(),
-            text: text,
+            description: text,
             completed: false
         };
         // TODO get this id after adding to database, seperate save_item php
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ listId: currentListId, itemText: item.text, completed: item.completed })
+          body: JSON.stringify({ listId: currentListId, description: item.description, completed: item.completed })
       })
       .then(response => response.text())
       .then(data => {
@@ -105,10 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         items.forEach((item) => {
             const li = document.createElement("li");
-            li.textContent = item.text;
+            li.textContent = item.description;
             li.dataset.id = item.id;
 
-            if (item.completed) {
+            if (item.completed == 1) {
                 li.classList.add("completed");
             }
 

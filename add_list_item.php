@@ -4,18 +4,18 @@ require_once 'db.php'; // Include your database connection file
 // Get the input from the request
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['listId']) || !isset($data['itemText'])) {
+if (!isset($data['listId']) || !isset($data['description'])) {
     http_response_code(400);
     echo json_encode(['error' => 'List ID and item name are required.']);
     exit;
 }
 
 $listId = (int)$data['listId'];
-$itemName = trim($data['itemText']);
+$itemName = trim($data['description']);
 $completed = (int)$data['completed'];
 
 // Prepare the SQL statement to insert a new item
-$sql = "INSERT INTO list_items (list_id, item_name, completed) VALUES (?, ?, ?)";
+$sql = "INSERT INTO list_items (list_id, description, completed) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
 if ($stmt === false) {
