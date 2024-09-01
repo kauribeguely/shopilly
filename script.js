@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const item = {
             id: Date.now(),
             description: text,
-            completed: false
+            completed: 0
         };
         // TODO get this id after adding to database, seperate save_item php
         // id: Date.now(),
@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         addItemToDb(item);
 
         items.push(item);
-        renderList();
     }
 
     function addItemToDb(item)
@@ -94,6 +93,26 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
           console.log("Response from server:", data);
           item.id = data.item_id;
+          item.completed = data.completed;
+          renderList();
+
+          // alert("Item saved successfully!");
+      })
+      .catch(error => console.error('Error:', error));
+    }
+
+    function updateItem(item)
+    {
+      fetch('update_list_item.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: item.id, listId: currentListId, description: item.description, completed: item.completed })
+      })
+      .then(response => response.text())
+      .then(data => {
+          console.log("Response from server:", data);
           // alert("Item saved successfully!");
       })
       .catch(error => console.error('Error:', error));
@@ -121,32 +140,34 @@ document.addEventListener("DOMContentLoaded", () => {
     function toggleCompletion(id) {
         const item = items.find((item) => item.id === id);
         if (item) {
-            item.completed = !item.completed;
+            if(item.completed == 0) item.completed = 1;
+            else item.completed = 0;
             renderList();
+            updateItem(item);
         }
     }
 
-    // Save the list via AJAX
-    saveButton.addEventListener("click", () => {
-        if (currentListId === null) {
-            alert("Please select a list first.");
-            return;
-        }
-
-        fetch('save_list.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ listId: currentListId, items: items })
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Response from server:", data);
-            alert("List saved successfully!");
-        })
-        .catch(error => console.error('Error:', error));
-    });
+    // // Save the list via AJAX
+    // saveButton.addEventListener("click", () => {
+    //     if (currentListId === null) {
+    //         alert("Please select a list first.");
+    //         return;
+    //     }
+    //
+    //     fetch('save_list.php', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ listId: currentListId, items: items })
+    //     })
+    //     .then(response => response.text())
+    //     .then(data => {
+    //         console.log("Response from server:", data);
+    //         alert("List saved successfully!");
+    //     })
+    //     .catch(error => console.error('Error:', error));
+    // });
 
     // Create a new list
     createListButton.addEventListener("click", () => {
