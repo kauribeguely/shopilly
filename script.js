@@ -2,7 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const newItemInput = document.getElementById("new-item");
     const listContainer = document.getElementById("list");
     const saveButton = document.getElementById("save-list");
-    const listsContainer = document.getElementById("lists-container");
+    const listsContainer = document.getElementById("lists");
+    const newListNameInput = document.getElementById("new-list-name");
+    const createListButton = document.getElementById("create-list");
+    const newListButton = document.getElementById("new-list-button"); // New List button
+    const currentListName = document.getElementById("current-list-name");
 
     let items = [];
     let currentListId = null;
@@ -41,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             li.addEventListener("click", () => {
                 currentListId = list.id;
+                currentListName.textContent = `List Items - ${list.name}`;
                 loadItems(list.id);
             });
 
@@ -119,4 +124,43 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error('Error:', error));
     });
+
+    // Create a new list
+    createListButton.addEventListener("click", () => {
+        const listName = newListNameInput.value.trim();
+        if (listName) {
+            createNewList(listName);
+        } else {
+            alert("Please enter a list name.");
+        }
+    });
+
+    // Create a new list and set it as the current list
+    newListButton.addEventListener("click", () => {
+        const listName = prompt("Enter a name for the new list:");
+        if (listName) {
+            createNewList(listName);
+        }
+    });
+
+    function createNewList(listName) {
+        fetch('create_list.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: listName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("New list created:", data);
+            currentListId = data.id; // Set the new list as the current list
+            currentListName.textContent = `List Items - ${listName}`;
+            items = []; // Clear items for the new list
+            renderList();
+            loadLists(); // Reload the lists to include the new one
+            newListNameInput.value = "";
+        })
+        .catch(error => console.error('Error creating list:', error));
+    }
 });
