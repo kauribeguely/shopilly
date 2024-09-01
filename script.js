@@ -65,15 +65,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Function to add a new item to the list
-    function addItem(text) {
+    function addItem(text)
+    {
         const item = {
             id: Date.now(),
             text: text,
             completed: false
         };
+        // TODO get this id after adding to database, seperate save_item php
+        // id: Date.now(),
+
+        addItemToDb(item);
 
         items.push(item);
         renderList();
+    }
+
+    function addItemToDb(item)
+    {
+      fetch('add_list_item.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ listId: currentListId, itemText: item.text, completed: item.completed })
+      })
+      .then(response => response.text())
+      .then(data => {
+          console.log("Response from server:", data);
+          item.id = data.item_id;
+          // alert("Item saved successfully!");
+      })
+      .catch(error => console.error('Error:', error));
     }
 
     // Function to render the list
