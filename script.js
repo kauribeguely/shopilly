@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         homeScreen.style.display = 'none';
         listScreen.style.display = 'block';
+        newItemInput.focus();
       }
     }
 
@@ -193,12 +194,31 @@ document.addEventListener("DOMContentLoaded", () => {
     //     .catch(error => console.error('Error:', error));
     // });
 
+    function formatDate(date) {
+        // Define the months array
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        // Get the day and month
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+
+        // Return formatted date
+        return `${day} ${month}`;
+    }
+
+
+
     // Create a new list
     createListButton.addEventListener("click", () => {
 
-      //set input to 'New List'
-      newListNameInput.value = "New List";
-      createNewList("New List");
+      // Get the current date
+      const currentDate = new Date();
+
+      let dateString = formatDate(currentDate);
+
+      // Set the value of newListNameInput
+      // newListNameInput.value = formatDate(currentDate);
+      createNewList(dateString);
       navigate('list');
 
         // const listName = newListNameInput.value.trim();
@@ -211,12 +231,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Create a new list and set it as the current list
-    newListButton.addEventListener("click", () => {
-        const listName = prompt("Enter a name for the new list:");
-        if (listName) {
-            createNewList(listName);
-        }
-    });
+    // newListButton.addEventListener("click", () => {
+    //     const listName = prompt("Enter a name for the new list:");
+    //     if (listName) {
+    //         createNewList(listName);
+    //     }
+    // });
 
     function createNewList(listName) {
         fetch('create_list.php', {
@@ -234,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
             items = []; // Clear items for the new list
             renderList();
             loadLists(); // Reload the lists to include the new one
-            newListNameInput.value = "";
+            // newListNameInput.value = "";
         })
         .catch(error => console.error('Error creating list:', error));
     }
