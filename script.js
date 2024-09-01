@@ -4,15 +4,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveButton = document.getElementById("save-list");
     const listsContainer = document.getElementById("lists");
     const newListNameInput = document.getElementById("new-list-name");
-    const createListButton = document.getElementById("create-list");
+    const createListButton = document.getElementById("button-new-list");
     const newListButton = document.getElementById("new-list-button"); // New List button
     const currentListName = document.getElementById("current-list-name");
+
+    const homeScreen = document.querySelector(".home");
+    const listScreen = document.querySelector(".list");
 
     let items = [];
     let currentListId = null;
 
     // Load all lists on page load
     loadLists();
+
+    // createListButton.onmousedown = function(){ navigate("home") };
+
+    document.querySelector('#button-home').onmousedown = function(){ navigate("home") };
+
+    function navigate(screenName)
+    {
+      if(screenName == 'home')
+      {
+        homeScreen.style.display = 'block';
+        listScreen.style.display = 'none';
+      }
+      else if(screenName == 'list')
+      {
+        homeScreen.style.display = 'none';
+        listScreen.style.display = 'block';
+      }
+    }
+
 
     // Add a new item to the list
     newItemInput.addEventListener("keypress", (event) => {
@@ -43,10 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
             li.textContent = list.name;
             li.dataset.id = list.id;
 
+            //on click of a list name
             li.addEventListener("click", () => {
                 currentListId = list.id;
-                currentListName.textContent = `List Items - ${list.name}`;
+                currentListName.textContent = `${list.name}`;
                 loadItems(list.id);
+                navigate('list');
             });
 
             listsContainer.appendChild(li);
@@ -171,12 +195,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Create a new list
     createListButton.addEventListener("click", () => {
-        const listName = newListNameInput.value.trim();
-        if (listName) {
-            createNewList(listName);
-        } else {
-            alert("Please enter a list name.");
-        }
+
+      //set input to 'New List'
+      newListNameInput.value = "New List";
+      createNewList("New List");
+      navigate('list');
+
+        // const listName = newListNameInput.value.trim();
+
+        // if (listName) {
+        //     createNewList(listName);
+        // } else {
+        //     alert("Please enter a list name.");
+        // }
     });
 
     // Create a new list and set it as the current list
@@ -199,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             console.log("New list created:", data);
             currentListId = data.id; // Set the new list as the current list
-            currentListName.textContent = `List Items - ${listName}`;
+            currentListName.textContent = `${listName}`;
             items = []; // Clear items for the new list
             renderList();
             loadLists(); // Reload the lists to include the new one
