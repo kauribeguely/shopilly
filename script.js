@@ -25,14 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       if(screenName == 'home')
       {
-        homeScreen.style.display = 'block';
+        homeScreen.style.display = 'flex';
         listScreen.style.display = 'none';
       }
       else if(screenName == 'list')
       {
         homeScreen.style.display = 'none';
-        listScreen.style.display = 'block';
-        newItemInput.focus();
+        listScreen.style.display = 'flex';
+        //if creation of new item, create top item and focus input
+        // newItemInput.focus();
       }
     }
 
@@ -58,25 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error loading lists:', error));
     }
 
-    // Render all lists in the UI
-    function renderLists(lists) {
-        listsContainer.innerHTML = "";
-        lists.forEach(list => {
-            const li = document.createElement("li");
-            li.textContent = list.name;
-            li.dataset.id = list.id;
-
-            //on click of a list name
-            li.addEventListener("click", () => {
-                currentListId = list.id;
-                currentListName.textContent = `${list.name}`;
-                loadItems(list.id);
-                navigate('list');
-            });
-
-            listsContainer.appendChild(li);
-        });
-    }
 
     // Load items for the selected list from the server
     function loadItems(listId) {
@@ -116,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then(response => response.text())
       .then(data => {
-          console.log("Response from server:", data);
+          // console.log("Response from server:", data);
           item.id = data.item_id;
           item.completed = data.completed;
           renderList();
@@ -137,29 +119,71 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then(response => response.text())
       .then(data => {
-          console.log("Response from server:", data);
+          // console.log("Response from server:", data);
           // alert("Item saved successfully!");
       })
       .catch(error => console.error('Error:', error));
     }
 
-    // Function to render the list
+    // Function to render items of a list
     function renderList() {
         listContainer.innerHTML = "";
 
         items.forEach((item) => {
-            const li = document.createElement("li");
-            li.textContent = item.description;
-            li.dataset.id = item.id;
-
-            if (item.completed == 1) {
-                li.classList.add("completed");
-            }
-
-            li.addEventListener("click", () => toggleCompletion(item.id));
-            listContainer.appendChild(li);
+            addAnItemToList(item);
         });
     }
+
+    function addAnItemToList(item)
+    {
+      const li = document.createElement("li");
+      const input = document.createElement("input");
+      input.setAttribute("type", "text");
+      input.value = item.description;
+
+      input.addEventListener("keypress", (event) => {
+          if (event.key === "Enter") {
+              const itemText = input.value.trim();
+              if (itemText && currentListId !== null) {
+                  addItem(itemText);
+                  // input.value = "";
+                  addAnItemToList({description: ""});
+              }
+          }
+      });
+
+      // li.textContent = item.description;
+      li.dataset.id = item.id;
+
+      if (item.completed == 1) {
+          li.classList.add("completed");
+      }
+
+      li.addEventListener("click", () => toggleCompletion(item.id));
+      li.appendChild(input);
+      listContainer.appendChild(li);
+    }
+
+    // Render all lists in the UI
+    function renderLists(lists) {
+        listsContainer.innerHTML = "";
+        lists.reverse().forEach(list => {
+            const li = document.createElement("li");
+            li.textContent = list.name;
+            li.dataset.id = list.id;
+
+            //on click of a list name
+            li.addEventListener("click", () => {
+                currentListId = list.id;
+                currentListName.textContent = `${list.name}`;
+                loadItems(list.id);
+                navigate('list');
+            });
+
+            listsContainer.appendChild(li);
+        });
+    }
+
 
     // Toggle the completion status of an item
     function toggleCompletion(id) {
@@ -220,6 +244,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // newListNameInput.value = formatDate(currentDate);
       createNewList(dateString);
       navigate('list');
+
+      //create first list item and focus input
+      addAnItemToList({description: ""});
 
         // const listName = newListNameInput.value.trim();
 

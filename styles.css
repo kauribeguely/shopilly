@@ -1,14 +1,53 @@
+:root
+{
+  --font: "Permanent Marker", cursive
+}
+
+body
+{
+  margin: 0px;
+}
+
+
 li.completed {
     text-decoration: line-through;
+    opacity: 0.3;
 }
 
 
 .container {
-    width: 400px;
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
     background-color: #ededed;
     height: 90vh;
+    font-family: var(--font);
+    padding: 20px;
+    h2
+    {
+      text-align: center;
+    }
+}
+
+input#new-item {
+    width: 92%;
+    border-radius: 30px;
+    font-size: 21px;
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #ccc;
+    box-shadow: inset 3px 3px 11px #0000002b;
+    font-family: var(--font);
+}
+
+button
+{
+      border-radius: 30px;
+      font-size: 21px;
+      padding: 10px;
+      box-shadow: 3px 3px 6px #00000036;
+      height: 50px;
+      width: 50px;
 }
 
 .displayNone {
@@ -39,4 +78,13 @@ li.completed {
 
 
 
+}
+
+.view
+{
+  justify-content: center;
+
+  li {
+      font-size: 20px;
+  }
 }

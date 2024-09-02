@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json'); // Ensure response is JSON
+
 $servername = "localhost";
 $username = "root"; // Adjust accordingly
 $password = ""; // Adjust accordingly
