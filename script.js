@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const newItemInput = document.getElementById("new-item");
+    // const newItemInput = document.getElementById("new-item");
     const listContainer = document.getElementById("list");
     const saveButton = document.getElementById("save-list");
     const listsContainer = document.getElementById("lists");
@@ -39,15 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // Add a new item to the list
-    newItemInput.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            const itemText = newItemInput.value.trim();
-            if (itemText && currentListId !== null) {
-                addItem(itemText);
-                newItemInput.value = "";
-            }
-        }
-    });
+    // newItemInput.addEventListener("keypress", (event) => {
+    //     if (event.key === "Enter") {
+    //         const itemText = newItemInput.value.trim();
+    //         if (itemText && currentListId !== null) {
+    //             addItem(itemText);
+    //             newItemInput.value = "";
+    //         }
+    //     }
+    // });
 
     // Load all lists from the server
     function loadLists() {
@@ -144,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.addEventListener("keypress", (event) => {
           if (event.key === "Enter") {
               const itemText = input.value.trim();
+              //TODO: check if item exists (via id) if yes, update it, no, create it
               if (itemText && currentListId !== null) {
                   addItem(itemText);
                   // input.value = "";
