@@ -8,6 +8,10 @@ body
   margin: 0px;
 }
 
+li
+{
+  list-style: none;
+}
 
 li.completed {
     text-decoration: line-through;
@@ -84,6 +88,11 @@ button
 
 
 
+}
+
+.nonEditInput, .nonEditInput:focus {
+    background: none;
+    border: none;
 }
 
 .view

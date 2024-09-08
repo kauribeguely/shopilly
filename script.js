@@ -142,8 +142,22 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       const li = document.createElement("li");
       const input = document.createElement("input");
+      const checkBox = document.createElement("input");
+      checkBox.type = "checkbox";
+
       input.setAttribute("type", "text");
       input.value = item.description;
+
+      if(item.description.length > 0) //the non editing inputs
+      {
+        input.classList.add('nonEditInput');
+        // input.disabled = true;
+        li.addEventListener("click", () => toggleCompletion(item.id, li));
+        li.appendChild(checkBox);
+      }
+      else
+      {
+      }
 
       input.addEventListener("keypress", (event) => {
           if (event.key === "Enter") {
@@ -163,9 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (item.completed == 1) {
           li.classList.add("completed");
+          checkBox.checked = true;
       }
 
-      li.addEventListener("click", () => toggleCompletion(item.id));
+
       li.appendChild(input);
       listContainer.appendChild(li);
       return li;
@@ -193,14 +208,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // Toggle the completion status of an item
-    function toggleCompletion(id) {
+    function toggleCompletion(id, clickedLi) {
         const item = items.find((item) => item.id === id);
         if (item) {
             if(item.completed == 0) item.completed = 1;
             else item.completed = 0;
-            renderList();
+            // renderList();
             updateItem(item);
         }
+
+        clickedLi.querySelector('input[type="checkbox"]').checked = item.completed;
+        clickedLi.classList.toggle('completed');
+        // clickedLi.querySelector('input[type="text"]').classList.toggle('completed');
+
     }
 
     // // Save the list via AJAX
