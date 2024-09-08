@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         homeScreen.style.display = 'flex';
         listScreen.style.display = 'none';
+        loadLists();
       }
       else if(screenName == 'list')
       {
@@ -163,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       li.addEventListener("click", () => toggleCompletion(item.id));
       li.appendChild(input);
       listContainer.appendChild(li);
+      return li;
     }
 
     // Render all lists in the UI
@@ -246,8 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       createNewList(dateString);
       navigate('list');
 
-      //create first list item and focus input
-      addAnItemToList({description: ""});
+
 
         // const listName = newListNameInput.value.trim();
 
@@ -280,8 +281,11 @@ document.addEventListener("DOMContentLoaded", () => {
             currentListId = data.id; // Set the new list as the current list
             currentListName.textContent = `${listName}`;
             items = []; // Clear items for the new list
-            renderList();
-            loadLists(); // Reload the lists to include the new one
+
+            //create first list item and focus input
+            addAnItemToList({description: ""}).focus();
+            // renderList();
+            // loadLists(); // Reload the lists to include the new one
             // newListNameInput.value = "";
         })
         .catch(error => console.error('Error creating list:', error));
