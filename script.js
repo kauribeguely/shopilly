@@ -134,8 +134,33 @@ document.addEventListener("DOMContentLoaded", () => {
             addAnItemToList(item);
         });
 
-        //add new list item below
-        addAnItemToList({description: ""}).children[0].focus();
+        //add new list item below and focus it
+        newItemInput();
+        // addAnItemToList({description: ""}).children[0].focus();
+    }
+
+    function newItemInput()
+    {
+      const li = document.createElement("li");
+      const input = document.createElement("input");
+
+      input.addEventListener("keypress", (event) => {
+          if (event.key === "Enter") {
+              const itemText = input.value.trim();
+              //TODO: check if item exists (via id) if yes, update it, no, create it
+              if (itemText && currentListId !== null) {
+                  addItem(itemText);
+                  // input.value = "";
+
+
+              }
+          }
+      });
+
+      li.appendChild(input);
+      listContainer.appendChild(li);
+      input.focus();
+      return li;
     }
 
     function addAnItemToList(item)
@@ -152,8 +177,15 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         input.classList.add('nonEditInput');
         // input.disabled = true;
-        li.addEventListener("click", () => toggleCompletion(item.id, li));
+        checkBox.addEventListener("click", () => toggleCompletion(item.id, li));
+        // li.addEventListener("click", () => toggleCompletion(item.id, li));
         li.appendChild(checkBox);
+        // Add event listener for double-click
+        li.addEventListener('dblclick', function()
+        {
+          input.disabled = false; // Enable the input field
+          input.focus();          // Set focus on the input field
+        });
       }
       else
       {
@@ -162,15 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
       input.addEventListener("keypress", (event) => {
           if (event.key === "Enter") {
               const itemText = input.value.trim();
+              item.description = itemText;
               //TODO: check if item exists (via id) if yes, update it, no, create it
-              if (itemText && currentListId !== null) {
-                  addItem(itemText);
-                  // input.value = "";
-
-
-              }
+              updateItem(item);
+              input.blur();
           }
       });
+
 
       // li.textContent = item.description;
       li.dataset.id = item.id;
@@ -307,7 +337,10 @@ document.addEventListener("DOMContentLoaded", () => {
             items = []; // Clear items for the new list
 
             //create first list item and focus input
-            addAnItemToList({description: ""}).children[0].focus();
+            // addAnItemToList({description: ""}).children[0].focus();
+            newItemInput();
+
+
             // renderList();
             // loadLists(); // Reload the lists to include the new one
             //TODO: add the new list to home (see renderLists() method)
