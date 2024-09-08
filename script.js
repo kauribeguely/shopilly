@@ -133,6 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
         items.forEach((item) => {
             addAnItemToList(item);
         });
+
+        //add new list item below
+        addAnItemToList({description: ""}).children[0].focus();
     }
 
     function addAnItemToList(item)
@@ -149,7 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
               if (itemText && currentListId !== null) {
                   addItem(itemText);
                   // input.value = "";
-                  addAnItemToList({description: ""});
+
+
               }
           }
       });
@@ -283,9 +287,10 @@ document.addEventListener("DOMContentLoaded", () => {
             items = []; // Clear items for the new list
 
             //create first list item and focus input
-            addAnItemToList({description: ""}).focus();
+            addAnItemToList({description: ""}).children[0].focus();
             // renderList();
             // loadLists(); // Reload the lists to include the new one
+            //TODO: add the new list to home (see renderLists() method)
             // newListNameInput.value = "";
         })
         .catch(error => console.error('Error creating list:', error));
