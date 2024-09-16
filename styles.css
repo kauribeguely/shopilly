@@ -44,6 +44,17 @@ input#new-item {
     font-family: var(--font);
 }
 
+input[type="checkbox"] {
+    height: 24px;
+    width: 24px;
+    /* rotate: 7deg; */
+    margin-bottom: 23px;
+}
+
+li input[type='text'] {
+    font-size: 25px;
+}
+
 button
 {
       border-radius: 30px;
