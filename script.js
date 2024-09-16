@@ -335,6 +335,8 @@ document.addEventListener("DOMContentLoaded", () => {
             currentListId = data.id; // Set the new list as the current list
             currentListName.textContent = `${listName}`;
             items = []; // Clear items for the new list
+            listContainer.innerHTML = "";
+            
 
             //create first list item and focus input
             // addAnItemToList({description: ""}).children[0].focus();
