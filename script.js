@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       const li = document.createElement("li");
       const input = document.createElement("input");
-
+      input.id = 'new-item';
       input.addEventListener("keypress", (event) => {
           if (event.key === "Enter") {
               const itemText = input.value.trim();
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentListName.textContent = `${listName}`;
             items = []; // Clear items for the new list
             listContainer.innerHTML = "";
-            
+
 
             //create first list item and focus input
             // addAnItemToList({description: ""}).children[0].focus();
